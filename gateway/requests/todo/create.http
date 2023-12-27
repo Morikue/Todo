@@ -1,0 +1,10 @@
+### Send POST request with json body
+POST {{host}}/todos/
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "created_by": 1,
+  "assignee": 1,
+  "description": "gogolev new task third"
+}
