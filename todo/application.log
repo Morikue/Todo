@@ -1,0 +1,2 @@
+{"level":"info","service":"my_app","time":"2023-12-21T14:33:25+02:00","message":"running server at 'localhost:80009'"}
+{"level":"info","service":"my_app","time":"2023-12-21T14:33:25+02:00","message":"running GRPC server at '0.0.0.0:50001'"}

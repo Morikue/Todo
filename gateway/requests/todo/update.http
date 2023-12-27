@@ -1,0 +1,14 @@
+### Send POST request with json body
+PUT {{host}}/todos/d428f864-cd7c-474a-85bb-23abd9644ed6
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+{
+  "id": "d428f864-cd7c-474a-85bb-23abd9644ed6",
+  "created_by": 1,
+  "assignee": 2,
+  "description": "hello",
+  "created_at": "2021-02-18T21:54:42.123Z",
+  "updated_at": "2021-02-18T21:54:42.123Z"
+}

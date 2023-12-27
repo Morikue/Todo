@@ -1,0 +1,12 @@
+### Send POST request with json body
+POST {{host}}/todos
+Content-Type: application/json
+
+{
+  "id": "83064af3-bb81-4514-a6d4-afba340825cd",
+  "created_by": 1,
+  "assignee": 2,
+  "description": "epopov@example.com",
+  "created_at": "2021-02-18T21:54:42.123Z",
+  "updated_at": "2021-02-18T21:54:42.123Z"
+}

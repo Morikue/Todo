@@ -1,0 +1,12 @@
+### Send POST request with json body
+POST {{host}}/todos/batch
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+
+{
+  "created_by": 1,
+  "assignee": 1,
+  "date_from": "2019-02-18T21:54:42.123Z",
+  "date_to": "2025-02-18T21:54:42.123Z"
+}
