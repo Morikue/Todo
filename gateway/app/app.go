@@ -49,6 +49,8 @@ func (a *App) RunAPI() error {
 		return rest.RunREST(a.cfg, a.logger, a.gatewayService)
 	})
 
+	fmt.Printf(a.cfg.App.AppHost, a.cfg.App.AppPort)
+
 	if err := group.Wait(); err != nil {
 		return fmt.Errorf("[RunAPI] run: %w", err)
 	}

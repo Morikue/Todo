@@ -13,3 +13,11 @@ type TodoRepository interface {
 	GetToDo(ctx context.Context, todoID uuid.UUID) (*models.TodoDAO, error)
 	DeleteToDo(ctx context.Context, todoID uuid.UUID) error
 }
+
+type RabbitProducer interface {
+	Publish(data []byte) (err error)
+}
+
+type UsersServiceClient interface {
+	GetUserByID(ctx context.Context, userID int) (*models.UserDTO, error)
+}

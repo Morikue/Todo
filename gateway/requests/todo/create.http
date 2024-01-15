@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "created_by": 1,
+  "created_by": 2,
   "assignee": 1,
-  "description": "gogolev new task third"
+  "description": "Make the bed"
 }

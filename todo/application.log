@@ -1,2 +1,5 @@
-{"level":"info","service":"my_app","time":"2023-12-21T14:33:25+02:00","message":"running server at 'localhost:80009'"}
-{"level":"info","service":"my_app","time":"2023-12-21T14:33:25+02:00","message":"running GRPC server at '0.0.0.0:50001'"}
+{"level":"info","service":"my_app","time":"2024-01-10T19:21:52+02:00","message":"[NewUsersClient] connecting via GRPC to usres at 0.0.0.0:50000"}
+{"level":"info","service":"my_app","time":"2024-01-10T19:21:52+02:00","message":"successfully connected to rabbitMQ"}
+{"level":"info","service":"my_app","time":"2024-01-10T19:21:52+02:00","message":"running server at '0.0.0.0:3001'"}
+{"level":"info","service":"my_app","time":"2024-01-10T19:21:52+02:00","message":"running GRPC server at '0.0.0.0:50001'"}
+{"level":"info","service":"my_app","time":"2024-01-10T19:22:21+02:00","message":"receivers:%!(EXTRA string=lehente@bk.ru, string=lehente2000@gmail.com)"}
