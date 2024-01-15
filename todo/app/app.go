@@ -9,6 +9,9 @@ import (
 	"todo/internal/api"
 	"todo/internal/api/grpc"
 	"todo/internal/api/rest"
+	"todo/pkg/rabbitmq/producer"
+
+	"todo/internal/clients/users"
 	"todo/internal/repository"
 	"todo/internal/service"
 	"todo/pkg/logging"
@@ -20,9 +23,12 @@ type App struct {
 	logger      *zerolog.Logger
 	router      *mux.Router
 	todoService api.TodoService
+	//rabbitmqProducer *producer.Producer
 }
 
 func NewApp(cfg *config.Config) (*App, error) {
+	logger := logging.NewLogger(cfg.Logging)
+
 	// подключимся к базе данных
 	databaseConn, err := postgresql.NewPgxConn(&cfg.Postgres)
 	if err != nil {
@@ -31,8 +37,23 @@ func NewApp(cfg *config.Config) (*App, error) {
 
 	todoRepo := repository.NewTodoRepository(databaseConn)
 
-	logger := logging.NewLogger(cfg.Logging)
-	todoService := service.NewTodoService(cfg, todoRepo)
+	usersClient, err := users.NewUsersClient(cfg, logger)
+	if err != nil {
+		return nil, fmt.Errorf("[NewApp] grpc users: %w", err)
+	}
+
+	// запустим rabbit mq продьюсер
+	todoProducer, err := producer.New(
+		&cfg.RabbitConfig,
+		cfg.TodoExchange,
+		cfg.TodoQueue,
+		logger,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("start rabbit producer: %w", err)
+	}
+
+	todoService := service.NewTodoService(cfg, todoRepo, logger, usersClient, todoProducer)
 
 	return &App{
 		cfg:         cfg,

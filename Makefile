@@ -1,10 +1,11 @@
 up:
 	docker-compose -f docker-compose.yaml down -v
-	docker-compose -f docker-compose.yaml up -d postgres
+	docker-compose -f docker-compose.yaml up -d postgres rabbitmq
 	docker-compose -f docker-compose.yaml up --build migrate-users
 	docker-compose -f docker-compose.yaml up --build migrate-todo
-	docker-compose -f docker-compose.yaml up -d users-service todo-service
-	docker-compose -f docker-compose.yaml up -d gateway-service
+	docker-compose -f docker-compose.yaml up -d --force-recreate users-service todo-service
+	docker-compose -f docker-compose.yaml up -d --force-recreate gateway-service
+	docker-compose -f docker-compose.yaml up -d --build --force-recreate notifications-service
 	docker-compose -f docker-compose.yaml ps
 
 down:
@@ -23,6 +24,9 @@ generate-users:
 
 	mkdir -p gateway/pkg/grpc_stubs/users
 	cp -r api/protos/users/* gateway/pkg/grpc_stubs/users
+
+	mkdir -p todo/pkg/grpc_stubs/users
+	cp -r api/protos/users/* todo/pkg/grpc_stubs/users
 
 generate-todos:
 	protoc -I api/protos/todos \

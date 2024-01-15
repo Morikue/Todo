@@ -16,7 +16,7 @@ type Config struct {
 
 type App struct {
 	AppHost string `envconfig:"APP_HOST" required:"true" default:"0.0.0.0"`
-	AppPort string `envconfig:"APP_PORT" required:"true" default:"8000"`
+	AppPort string `envconfig:"APP_PORT" required:"true" default:"3009"`
 }
 
 type UsersClient struct {

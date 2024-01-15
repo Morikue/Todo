@@ -6,7 +6,7 @@ Content-Type: application/json
   "username": "gogolev",
   "password": "gogolev",
   "password_confirmation": "gogolev",
-  "email": "gogolev@example.com"
+  "email": "lehente@bk.ru"
 }
 
 ### Send POST request with json body
@@ -14,8 +14,8 @@ POST {{host}}/users/register
 Content-Type: application/json
 
 {
-  "username": "epopov",
-  "password": "epopov",
-  "password_confirmation": "epopov",
-  "email": "epopov@example.com"
+  "username": "goga",
+  "password": "goga",
+  "password_confirmation": "goga",
+  "email": "lehente2000@gmail.com"
 }

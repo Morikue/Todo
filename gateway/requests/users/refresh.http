@@ -1,5 +1,5 @@
 ### Send POST request with json body
-POST {{host}}/refresh
+POST {{host}}users/refresh
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
