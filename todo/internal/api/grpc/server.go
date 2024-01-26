@@ -13,6 +13,7 @@ import (
 type server struct {
 	todo.UnimplementedTodoServiceServer
 	todoService api.TodoService
+	logger      *zerolog.Logger
 }
 
 func NewGrpcApi(
@@ -33,6 +34,7 @@ func NewGrpcApi(
 
 	todo.RegisterTodoServiceServer(s, &server{
 		todoService: todoService,
+		logger:      logger,
 	})
 	if err := s.Serve(lis); err != nil {
 		return fmt.Errorf("[NewGrpcApi] serve: %w", err)

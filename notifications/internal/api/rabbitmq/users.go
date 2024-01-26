@@ -26,7 +26,9 @@ func NewUsersMessagesHandler(
 func (m *UsersMessagesHandler) Handle(d amqp.Delivery) {
 	requestID := d.Headers["requestId"]
 
-	m.logger.Info().Msgf("request id %s", requestID)
+	m.logger.Info().
+		Str("requestId", requestID.(string)).
+		Msgf("request id %s", requestID)
 
 	var item models.UserMailItem
 	err := json.Unmarshal(d.Body, &item)

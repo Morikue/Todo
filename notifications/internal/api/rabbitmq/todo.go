@@ -26,7 +26,9 @@ func NewTodoMessagesHandler(
 func (m *TodoMessagesHandler) Handle(d amqp.Delivery) {
 	requestID := d.Headers["requestId"]
 
-	m.logger.Info().Msgf("request id %s", requestID)
+	m.logger.Info().
+		Str("requestId", requestID.(string)).
+		Msgf("request id %s", requestID)
 
 	var item models.TodoMailItem
 	err := json.Unmarshal(d.Body, &item)

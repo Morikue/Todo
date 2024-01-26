@@ -18,6 +18,9 @@ ENV TODOS_HOST=todo-service
 ENV TODOS_REST_PORT=3001
 ENV TODOS_GRPC_PORT=50001
 
+ENV JAEGER_HOST=jaeger:6831
+ENV JAEGER_LOG_SPANS=true
+
 # копируем файлы приложения в рабочую папку образа
 COPY app /build/app
 COPY cmd /build/cmd

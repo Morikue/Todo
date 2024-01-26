@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/kelseyhightower/envconfig"
+	"users/pkg/jaeger"
 	"users/pkg/logging"
 	"users/pkg/postgresql"
 	"users/pkg/rabbitmq"
@@ -12,6 +13,7 @@ type Config struct {
 	Grpc          Grpc                  `envconfig:"GRPC"`
 	Password      PasswordConfig        `envconfig:"PASS"`
 	Logging       logging.LoggerConfig  `envconfig:"LOG"`
+	Jaeger        jaeger.JaegerConfig   `envconfig:"JAEGER"`
 	Postgres      postgresql.PostgreSQL `envconfig:"POSTGRES"`
 	RabbitConfig  rabbitmq.RabbitConfig `envconfig:"RABBITMQ"`
 	UsersExchange string                `envconfig:"RABBITMQ_USERS_EXCHANGE" default:"users.exchange"`

@@ -3,12 +3,14 @@ package app
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/opentracing/opentracing-go"
 	"github.com/rs/zerolog"
 	"golang.org/x/sync/errgroup"
 	"todo/config"
 	"todo/internal/api"
 	"todo/internal/api/grpc"
 	"todo/internal/api/rest"
+	"todo/pkg/jaeger"
 	"todo/pkg/rabbitmq/producer"
 
 	"todo/internal/clients/users"
@@ -63,6 +65,16 @@ func NewApp(cfg *config.Config) (*App, error) {
 }
 
 func (a *App) RunAPI() error {
+	tracer, closer, err := jaeger.InitJaeger(&a.cfg.Jaeger, a.cfg.Logging.LogIndex)
+	if err != nil {
+		return fmt.Errorf("[NewApp] init jaeger %w", err)
+	}
+
+	a.logger.Info().Msgf("connected to jaeger at '%s'", a.cfg.Jaeger.Host)
+
+	opentracing.SetGlobalTracer(tracer)
+	defer closer.Close()
+
 	group := new(errgroup.Group)
 	group.Go(func() error {
 		err := rest.NewRestApi(a.cfg, a.logger, a.todoService)

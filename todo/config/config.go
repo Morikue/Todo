@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/kelseyhightower/envconfig"
+	"todo/pkg/jaeger"
 	"todo/pkg/logging"
 	"todo/pkg/postgresql"
 	"todo/pkg/rabbitmq"
@@ -11,6 +12,7 @@ type Config struct {
 	App          AppConfig             `envconfig:"APP"`
 	Grpc         Grpc                  `envconfig:"GRPC"`
 	Logging      logging.LoggerConfig  `envconfig:"LOG"`
+	Jaeger       jaeger.JaegerConfig   `envconfig:"JAEGER"`
 	Postgres     postgresql.PostgreSQL `envconfig:"POSTGRES"`
 	UsersClient  UsersClient           `envconfig:"USERS"`
 	RabbitConfig rabbitmq.RabbitConfig `envconfig:"RABBITMQ"`

@@ -5,24 +5,34 @@ import (
 	"errors"
 	"gateway/internal/app_errors"
 	"gateway/internal/models"
+	"gateway/pkg/ctxutil"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
+	"github.com/opentracing/opentracing-go"
 	"net/http"
 )
 
 func (h *GatewayHandler) CreateToDoHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	requestId, _ := ctxutil.GetRequestIDFromContext(ctx)
+	span, ctx := opentracing.StartSpanFromContext(ctx, "gateway.CreateTo")
+	defer span.Finish()
+
 	var newTodo = new(models.CreateTodoDTO)
 	if err := json.NewDecoder(r.Body).Decode(&newTodo); err != nil {
-		h.logger.Error().Msgf("[CreateToDoHandler] unmarshal: %s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[CreateToDoHandler] unmarshal: %s", err)
 		h.ErrorBadRequest(w)
 		return
 	}
 
 	createdTodo, err := h.gatewayService.CreateToDo(ctx, newTodo)
 	if err != nil {
-		h.logger.Error().Msgf("[CreateToDoHandler] create todo: %s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[CreateToDoHandler] create todo: %s", err)
 		h.ErrorInternalApi(w)
 		return
 	}
@@ -33,9 +43,15 @@ func (h *GatewayHandler) CreateToDoHandler(w http.ResponseWriter, r *http.Reques
 func (h *GatewayHandler) GetToDoHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	requestId, _ := ctxutil.GetRequestIDFromContext(ctx)
+	span, ctx := opentracing.StartSpanFromContext(ctx, "gateway.GetToDo")
+	defer span.Finish()
+
 	id, err := uuid.Parse(mux.Vars(r)["id"])
 	if err != nil {
-		h.logger.Error().Msgf("[GetToDoHandler] parse id from url: %s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[GetToDoHandler] parse id from url: %s", err)
 		h.ErrorBadRequest(w)
 		return
 	}
@@ -47,7 +63,9 @@ func (h *GatewayHandler) GetToDoHandler(w http.ResponseWriter, r *http.Request) 
 			return
 		}
 
-		h.logger.Error().Msgf("[GetToDoHandler] get todo: %s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[GetToDoHandler] get todo: %s", err)
 		h.ErrorInternalApi(w)
 		return
 	}
@@ -58,16 +76,24 @@ func (h *GatewayHandler) GetToDoHandler(w http.ResponseWriter, r *http.Request) 
 func (h *GatewayHandler) GetToDosHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	requestId, _ := ctxutil.GetRequestIDFromContext(ctx)
+	span, ctx := opentracing.StartSpanFromContext(ctx, "gateway.GetToDos")
+	defer span.Finish()
+
 	var newTodos = new(models.GetTodosDTO)
 	if err := json.NewDecoder(r.Body).Decode(&newTodos); err != nil {
-		h.logger.Error().Msgf("[GetToDos] unmarshal:%s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[GetToDos] unmarshal:%s", err)
 		h.ErrorBadRequest(w)
 		return
 	}
 
 	response, err := h.gatewayService.GetToDos(ctx, newTodos)
 	if err != nil {
-		h.logger.Error().Msgf("[GetToDos] getting:%s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[GetToDos] getting:%s", err)
 		h.ErrorInternalApi(w)
 		return
 	}
@@ -79,9 +105,15 @@ func (h *GatewayHandler) GetToDosHandler(w http.ResponseWriter, r *http.Request)
 func (h *GatewayHandler) UpdateToDoHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	requestId, _ := ctxutil.GetRequestIDFromContext(ctx)
+	span, ctx := opentracing.StartSpanFromContext(ctx, "gateway.Update")
+	defer span.Finish()
+
 	id, err := uuid.Parse(mux.Vars(r)["id"])
 	if err != nil {
-		h.logger.Error().Msgf("[UpdateToDoHandler] parse id from url: %s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[UpdateToDoHandler] parse id from url: %s", err)
 		h.ErrorBadRequest(w)
 		return
 	}
@@ -100,7 +132,9 @@ func (h *GatewayHandler) UpdateToDoHandler(w http.ResponseWriter, r *http.Reques
 			return
 		}
 
-		h.logger.Error().Msgf("[UpdateToDoHandler] update todo: %s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[UpdateToDoHandler] update todo: %s", err)
 		h.ErrorInternalApi(w)
 		return
 	}
@@ -111,9 +145,15 @@ func (h *GatewayHandler) UpdateToDoHandler(w http.ResponseWriter, r *http.Reques
 func (h *GatewayHandler) DeleteToDoHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	requestId, _ := ctxutil.GetRequestIDFromContext(ctx)
+	span, ctx := opentracing.StartSpanFromContext(ctx, "gateway.DeleteToDo")
+	defer span.Finish()
+
 	id, err := uuid.Parse(mux.Vars(r)["id"])
 	if err != nil {
-		h.logger.Error().Msgf("[DeleteToDoHandler] parse id from url: %s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[DeleteToDoHandler] parse id from url: %s", err)
 		h.ErrorBadRequest(w)
 		return
 	}
@@ -125,7 +165,9 @@ func (h *GatewayHandler) DeleteToDoHandler(w http.ResponseWriter, r *http.Reques
 			return
 		}
 
-		h.logger.Error().Msgf("[DeleteToDoHandler] delete todo: %s", err)
+		h.logger.Error().
+			Str("requestId", requestId).
+			Msgf("[DeleteToDoHandler] delete todo: %s", err)
 		h.ErrorInternalApi(w)
 		return
 	}
