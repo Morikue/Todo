@@ -15,7 +15,7 @@ type TodoRepository interface {
 }
 
 type RabbitProducer interface {
-	Publish(data []byte) (err error)
+	Publish(data []byte, requestID string) (err error)
 }
 
 type UsersServiceClient interface {

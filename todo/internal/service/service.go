@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/opentracing/opentracing-go"
 	"github.com/rs/zerolog"
 	"time"
 	"todo/config"
 	"todo/internal/models"
+	"todo/pkg/ctxutil"
 )
 
 type TodoService struct {
@@ -36,6 +38,11 @@ func NewTodoService(
 }
 
 func (s *TodoService) CreateToDo(ctx context.Context, newTodo *models.TodoDTO) (*models.TodoDTO, error) {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "service.CreateToDo")
+	defer span.Finish()
+
 	createdTodo, err := s.todoRepo.CreateToDo(ctx, newTodo.ToDAO())
 	if err != nil {
 		return nil, fmt.Errorf("[CreateToDo] create todo: %w", err)
@@ -67,7 +74,8 @@ func (s *TodoService) CreateToDo(ctx context.Context, newTodo *models.TodoDTO) (
 		return nil, fmt.Errorf("[CreateToDo] marshal new todo mssg:%w", err)
 	}
 
-	err = s.todoRabbitProducer.Publish(data)
+	requestID, _ := ctxutil.GetRequestIDFromContext(ctx)
+	err = s.todoRabbitProducer.Publish(data, requestID)
 	if err != nil {
 		return nil, fmt.Errorf("[CreateToDo] publish new todo letter mssg:%w", err)
 	}
@@ -76,6 +84,11 @@ func (s *TodoService) CreateToDo(ctx context.Context, newTodo *models.TodoDTO) (
 }
 
 func (s *TodoService) UpdateToDo(ctx context.Context, newTodo *models.TodoDTO) (*models.TodoDTO, error) {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "service.UpdateToDo")
+	defer span.Finish()
+
 	existedTodo, err := s.todoRepo.GetToDo(ctx, newTodo.ID)
 	if err != nil {
 		return nil, fmt.Errorf("[UpdateToDo] get todo: %w", err)
@@ -105,7 +118,8 @@ func (s *TodoService) UpdateToDo(ctx context.Context, newTodo *models.TodoDTO) (
 		return nil, fmt.Errorf("[UpdateToDo] marshal update todo mssg:%w", err)
 	}
 
-	err = s.todoRabbitProducer.Publish(data)
+	requestID, _ := ctxutil.GetRequestIDFromContext(ctx)
+	err = s.todoRabbitProducer.Publish(data, requestID)
 	if err != nil {
 		return nil, fmt.Errorf("[UpdateToDo] publish update todo letter mssg:%w", err)
 	}
@@ -114,6 +128,11 @@ func (s *TodoService) UpdateToDo(ctx context.Context, newTodo *models.TodoDTO) (
 }
 
 func (s *TodoService) GetToDos(ctx context.Context, todos *models.GetTodosDTO) ([]models.TodoDTO, error) {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "service.GetToDos")
+	defer span.Finish()
+
 	existedTodos, err := s.todoRepo.GetToDos(ctx, todos)
 	if err != nil {
 		return nil, fmt.Errorf("[GetToDos] get todos: %w", err)
@@ -125,6 +144,11 @@ func (s *TodoService) GetToDos(ctx context.Context, todos *models.GetTodosDTO) (
 }
 
 func (s *TodoService) GetToDo(ctx context.Context, todoID uuid.UUID) (*models.TodoDTO, error) {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "service.GetToDo")
+	defer span.Finish()
+
 	response, err := s.todoRepo.GetToDo(ctx, todoID)
 	if err != nil {
 		return nil, fmt.Errorf("[GetToDo] get todo: %w", err)
@@ -134,6 +158,11 @@ func (s *TodoService) GetToDo(ctx context.Context, todoID uuid.UUID) (*models.To
 }
 
 func (s *TodoService) DeleteToDo(ctx context.Context, todoID uuid.UUID) error {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "service.DeleteToDo")
+	defer span.Finish()
+
 	existedTodo, err := s.todoRepo.GetToDo(ctx, todoID)
 	if err != nil {
 		return fmt.Errorf("[DeleteToDo] get todo: %w", err)
@@ -159,7 +188,8 @@ func (s *TodoService) DeleteToDo(ctx context.Context, todoID uuid.UUID) error {
 		return fmt.Errorf("[DeleteToDo] marshal delete todo mssg:%w", err)
 	}
 
-	err = s.todoRabbitProducer.Publish(data)
+	requestID, _ := ctxutil.GetRequestIDFromContext(ctx)
+	err = s.todoRabbitProducer.Publish(data, requestID)
 	if err != nil {
 		return fmt.Errorf("[DeleteToDo] publish delete todo letter mssg:%w", err)
 	}

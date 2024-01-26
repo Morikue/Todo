@@ -1,6 +1,8 @@
 up:
 	docker-compose -f docker-compose.yaml down -v
-	docker-compose -f docker-compose.yaml up -d postgres rabbitmq
+	docker-compose -f docker-compose.yaml up -d jaeger
+	docker-compose -f docker-compose.yaml up -d rabbitmq
+	docker-compose -f docker-compose.yaml up -d postgres
 	docker-compose -f docker-compose.yaml up --build migrate-users
 	docker-compose -f docker-compose.yaml up --build migrate-todo
 	docker-compose -f docker-compose.yaml up -d --force-recreate users-service todo-service

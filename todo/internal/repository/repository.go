@@ -6,7 +6,9 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/opentracing/opentracing-go"
 	"todo/internal/models"
+	"todo/pkg/ctxutil"
 )
 
 type TodoRepository struct {
@@ -18,6 +20,11 @@ func NewTodoRepository(conn *pgxpool.Pool) *TodoRepository {
 }
 
 func (r *TodoRepository) CreateToDo(ctx context.Context, newTodo *models.TodoDAO) (*models.TodoDAO, error) {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "repository.CreateToDo")
+	defer span.Finish()
+
 	var todoId uuid.UUID
 
 	sql := `
@@ -46,6 +53,11 @@ func (r *TodoRepository) CreateToDo(ctx context.Context, newTodo *models.TodoDAO
 }
 
 func (r *TodoRepository) UpdateToDo(ctx context.Context, newTodo *models.TodoDAO) (*models.TodoDAO, error) {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "repository.UpdateToDo")
+	defer span.Finish()
+
 	sql := `
 	UPDATE
 		todos
@@ -66,6 +78,11 @@ func (r *TodoRepository) UpdateToDo(ctx context.Context, newTodo *models.TodoDAO
 }
 
 func (r *TodoRepository) GetToDos(ctx context.Context, todos *models.GetTodosDTO) ([]models.TodoDAO, error) {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "repository.GetToDos")
+	defer span.Finish()
+
 	var todosFromDb = make([]models.TodoDAO, 0)
 
 	builder := squirrel.Select(
@@ -134,6 +151,11 @@ func (r *TodoRepository) GetToDos(ctx context.Context, todos *models.GetTodosDTO
 }
 
 func (r *TodoRepository) GetToDo(ctx context.Context, todoID uuid.UUID) (*models.TodoDAO, error) {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "repository.GetToDo")
+	defer span.Finish()
+
 	var todo models.TodoDAO
 	sql := `
         SELECT 
@@ -157,6 +179,11 @@ func (r *TodoRepository) GetToDo(ctx context.Context, todoID uuid.UUID) (*models
 }
 
 func (r *TodoRepository) DeleteToDo(ctx context.Context, todoID uuid.UUID) error {
+	ctx = ctxutil.SetRequestIdFromGrpcToContext(ctx)
+
+	span, ctx := opentracing.StartSpanFromContext(ctx, "repository.DeleteToDo")
+	defer span.Finish()
+
 	sql := `
         DELETE FROM 
 		    todos
