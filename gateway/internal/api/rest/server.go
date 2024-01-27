@@ -46,7 +46,6 @@ func RunREST(
 	// запустить вебсервер по адресу, передать в него роутер
 	appAddr := fmt.Sprintf("%s:%s", cfg.App.AppHost, cfg.App.AppPort)
 	logger.Info().Msgf("running server at '%s'", appAddr)
-	fmt.Printf("running server at '%s'", appAddr)
 	err := http.ListenAndServe(appAddr, router)
 	if err != nil {
 		return fmt.Errorf("[RunREST] listen and serve: %w", err)

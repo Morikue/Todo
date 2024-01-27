@@ -1,11 +1,11 @@
 ### Send POST request with json body
-PUT {{host}}/todos/33f9ea88-dae4-4ef0-a7e7-7a85ee8b7dc8
+PUT {{host}}/todos/{{last_todo_id}}
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 
 {
-  "id": "33f9ea88-dae4-4ef0-a7e7-7a85ee8b7dc8",
+  "id": {{last_todo_id}},
   "created_by": 2,
   "assignee": 1,
   "description": "Go to the gym",

@@ -30,7 +30,6 @@ func NewGrpcApi(
 	s := grpc.NewServer()
 
 	logger.Info().Msgf("running GRPC server at '%s'", appAddr)
-	fmt.Printf("running server at '%s'", appAddr)
 
 	todo.RegisterTodoServiceServer(s, &server{
 		todoService: todoService,

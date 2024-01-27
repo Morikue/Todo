@@ -11,8 +11,8 @@ ENV LOG_TO_FILE=false
 
 ENV SMTP_HOST=smtp.yandex.ru
 ENV SMTP_PORT=25
-ENV SMTP_USER=*
-ENV SMTP_PASSWORD=*
+ENV SMTP_USER=course.notifications@yandex.ru
+ENV SMTP_PASSWORD=ulyakmzpjokpcpiz
 
 ENV RABBITMQ_USER=notifications
 ENV RABBITMQ_PASSWORD=notifications
