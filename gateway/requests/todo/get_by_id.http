@@ -1,4 +1,4 @@
 ### Send POST request with json body
-GET {{host}}/todos/b2e79736-08d4-426b-8d16-341761be1738
+GET {{host}}/todos/{{last_todo_id}}
 Authorization: Bearer {{access_token}}
 

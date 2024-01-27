@@ -8,3 +8,7 @@ Authorization: Bearer {{access_token}}
   "assignee": 1,
   "description": "Make the bed"
 }
+
+> {%
+    client.global.set("last_todo_id", response.body.id);
+%}
